@@ -1,8 +1,39 @@
-
 import { motion } from "framer-motion";
 import { Figma, Palette, Lightbulb } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { useState } from "react";
 
 const Index = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    const formData = new FormData(e.currentTarget);
+    
+    try {
+      const response = await fetch("https://formspree.io/f/kapilsonawane91@gmail.com", {
+        method: "POST",
+        body: formData,
+        headers: {
+          Accept: "application/json",
+        },
+      });
+
+      if (response.ok) {
+        setSubmitted(true);
+        (e.target as HTMLFormElement).reset();
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -118,18 +149,57 @@ const Index = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="max-w-xl mx-auto text-center"
+            className="max-w-xl mx-auto"
           >
-            <h2 className="text-3xl font-bold mb-8">Get in Touch</h2>
-            <p className="text-lg text-muted-foreground mb-12">
-              I'm always open to discussing new projects and opportunities.
-            </p>
-            <a
-              href="mailto:contact@kapilsonawane.com"
-              className="inline-flex items-center justify-center px-6 py-3 text-base font-medium text-white bg-primary rounded-full hover:bg-primary/90 transition-colors"
-            >
-              Send me an email
-            </a>
+            <div className="text-center">
+              <h2 className="text-3xl font-bold mb-8">Get in Touch</h2>
+              <p className="text-lg text-muted-foreground mb-12">
+                I'm always open to discussing new projects and opportunities.
+              </p>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="space-y-2">
+                <label htmlFor="email" className="block text-sm font-medium">
+                  Your Email
+                </label>
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="your@email.com"
+                  required
+                  className="w-full"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label htmlFor="message" className="block text-sm font-medium">
+                  Message
+                </label>
+                <Textarea
+                  id="message"
+                  name="message"
+                  placeholder="Tell me about your project..."
+                  required
+                  className="min-h-[150px] w-full"
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full inline-flex items-center justify-center px-6 py-3 text-base font-medium text-white bg-primary rounded-full hover:bg-primary/90 transition-colors disabled:opacity-50"
+              >
+                {isSubmitting ? "Sending..." : "Send Message"}
+              </button>
+
+              {submitted && (
+                <p className="text-center text-sm text-green-600">
+                  Thank you for your message! I'll get back to you soon.
+                </p>
+              )}
+            </form>
           </motion.div>
         </div>
       </section>
