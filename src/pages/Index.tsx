@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import emailjs from '@emailjs/browser';
 
 const Index = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -14,18 +15,15 @@ const Index = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    const formData = new FormData(e.currentTarget);
-    
     try {
-      const response = await fetch("https://formspree.io/f/xgegkbqv", {
-        method: "POST",
-        body: formData,
-        headers: {
-          Accept: "application/json",
-        },
-      });
+      const result = await emailjs.sendForm(
+        'YOUR_SERVICE_ID', // Replace with your EmailJS service ID
+        'YOUR_TEMPLATE_ID', // Replace with your EmailJS template ID
+        e.currentTarget,
+        'YOUR_PUBLIC_KEY' // Replace with your EmailJS public key
+      );
 
-      if (response.ok) {
+      if (result.text === 'OK') {
         setSubmitted(true);
         (e.target as HTMLFormElement).reset();
         toast({
@@ -35,6 +33,11 @@ const Index = () => {
       }
     } catch (error) {
       console.error("Error submitting form:", error);
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again.",
+        variant: "destructive",
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -166,12 +169,12 @@ const Index = () => {
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
-                <label htmlFor="email" className="block text-sm font-medium">
+                <label htmlFor="from_email" className="block text-sm font-medium">
                   Your Email
                 </label>
                 <Input
-                  id="email"
-                  name="email"
+                  id="from_email"
+                  name="from_email"
                   type="email"
                   placeholder="your@email.com"
                   required
