@@ -17,10 +17,10 @@ const Index = () => {
 
     try {
       const result = await emailjs.sendForm(
-        'YOUR_SERVICE_ID', // Replace with your EmailJS service ID
-        'YOUR_TEMPLATE_ID', // Replace with your EmailJS template ID
+        'service_o6aef94', // EmailJS service ID
+        'template_hxbchm6', // EmailJS template ID
         e.currentTarget,
-        'YOUR_PUBLIC_KEY' // Replace with your EmailJS public key
+        'dsr-Sv1p9QCFAoyiV' // EmailJS public key
       );
 
       if (result.text === 'OK') {
