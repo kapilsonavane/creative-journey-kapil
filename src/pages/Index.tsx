@@ -17,7 +17,7 @@ const Index = () => {
     const formData = new FormData(e.currentTarget);
     
     try {
-      const response = await fetch("https://formspree.io/f/sonawanekapil91@gmail.com", {
+      const response = await fetch("https://formspree.io/f/xgegkbqv", {
         method: "POST",
         body: formData,
         headers: {
