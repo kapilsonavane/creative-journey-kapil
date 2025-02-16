@@ -3,10 +3,12 @@ import { Figma, Palette, Lightbulb } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 const Index = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -15,7 +17,7 @@ const Index = () => {
     const formData = new FormData(e.currentTarget);
     
     try {
-      const response = await fetch("https://formspree.io/f/kapilsonawane91@gmail.com", {
+      const response = await fetch("https://formspree.io/f/sonawanekapil91@gmail.com", {
         method: "POST",
         body: formData,
         headers: {
@@ -26,6 +28,10 @@ const Index = () => {
       if (response.ok) {
         setSubmitted(true);
         (e.target as HTMLFormElement).reset();
+        toast({
+          title: "Message sent!",
+          description: "Thanks for contacting me. I'll get back to you soon.",
+        });
       }
     } catch (error) {
       console.error("Error submitting form:", error);
