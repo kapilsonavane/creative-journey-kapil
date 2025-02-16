@@ -11,6 +11,14 @@ const Index = () => {
   const [submitted, setSubmitted] = useState(false);
   const { toast } = useToast();
 
+  const handleGetInTouch = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -66,6 +74,7 @@ const Index = () => {
             </p>
             <a
               href="#contact"
+              onClick={handleGetInTouch}
               className="inline-flex items-center justify-center px-6 py-3 text-base font-medium text-white bg-primary rounded-full hover:bg-primary/90 transition-colors"
             >
               Get in Touch
